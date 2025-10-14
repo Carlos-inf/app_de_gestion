@@ -1,0 +1,76 @@
+[
+  {
+    "id_trabajo": "T-001",
+    "nombre_cliente": "Isabella García",
+    "telefono_cliente": "987654321",
+    "nombre_trabajo": "Vestido de Novia",
+    "cantidad_piezas": 1,
+    "fecha_recepcion": "2025-09-20",
+    "fecha_entrega_estimada": "2025-11-20",
+    "valor_total": 850000,
+    "abono_recibido": 250000,
+    "estado_trabajo": "Por Hacer",
+    "estado_entrega": false,
+    "detalle_general": "Encaje francés, corte sirena. Forro doble.",
+    "url_boceto": "https://st5.depositphotos.com/54273738/68492/v/450/depositphotos_684928476-stock-illustration-set-brides-white-wedding-dress.jpg",
+    "medidas": {
+      "busto": "92 cm",
+      "cintura": "70 cm",
+      "largo_total": "150 cm"
+    }
+  },
+  {
+    "id_trabajo": "T-002",
+    "nombre_cliente": "Ricardo Gómez",
+    "telefono_cliente": "112233445",
+    "nombre_trabajo": "Arreglo de Jeans (Bajo)",
+    "cantidad_piezas": 2,
+    "fecha_recepcion": "2025-10-01",
+    "fecha_entrega_estimada": "2025-10-08",
+    "valor_total": 15000,
+    "abono_recibido": 15000,
+    "estado_trabajo": "En Proceso",
+    "estado_entrega": false,
+    "detalle_general": "Acortar 5cm manteniendo el dobladillo original.",
+    "url_boceto": "",
+    "medidas": {
+      "largo_entrepierna": "78 cm"
+    }
+  },
+  {
+    "id_trabajo": "T-003",
+    "nombre_cliente": "Martina Soto",
+    "telefono_cliente": "556677889",
+    "nombre_trabajo": "Saco Formal",
+    "cantidad_piezas": 1,
+    "fecha_recepcion": "2025-10-04",
+    "fecha_entrega_estimada": "2025-11-15",
+    "valor_total": 300000,
+    "abono_recibido": 0,
+    "estado_trabajo": "Terminado",
+    "estado_entrega": false,
+    "detalle_general": "Saco de lana, forro color borgoña. Botones dorados.",
+    "url_boceto": "https://d1fufvy4xao6k9.cloudfront.net/images/blog/posts/2024/03/screenshot_4.jpg",
+    "medidas": {
+      "espalda": "42 cm"
+    }
+  },
+  {
+    "id_trabajo": "T-004",
+    "nombre_cliente": "Pedro Lagos",
+    "telefono_cliente": "443322110",
+    "nombre_trabajo": "Disfraz Infantil (León)",
+    "cantidad_piezas": 3,
+    "fecha_recepcion": "2025-10-05",
+    "fecha_entrega_estimada": "2025-10-25",
+    "valor_total": 50000,
+    "abono_recibido": 20000,
+    "estado_trabajo": "Por Hacer",
+    "estado_entrega": false,
+    "detalle_general": "Disfraz de león. Incluye máscara y cola.",
+    "url_boceto": "https://http2.mlstatic.com/D_NQ_NP_771421-CBT90595932034_082025-O-disfraz-de-leon-para-ninos-disfraz-de-animal-disfraz.webp",
+    "medidas": {
+      "altura": "110 cm"
+    }
+  }
+]
