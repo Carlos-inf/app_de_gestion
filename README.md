@@ -1,67 +1,70 @@
-# 🗂️ Backend API para Dashboard Kanban (Laravel)
+# Getting Started with Create React App
 
-Este repositorio contiene el backend (**API RESTful**) desarrollado en **Laravel**, utilizado por el Dashboard Kanban creado en React.  
-Su objetivo principal es gestionar los **trabajos**, permitiendo su creación, lectura, actualización (incluyendo movimiento entre columnas) y eliminación.
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
----
+## Available Scripts
 
-## 🛠️ Requisitos del Sistema
+In the project directory, you can run:
 
-- **PHP:** 8.2 o superior  
-- **Composer**  
-- **Base de Datos:** MySQL o PostgreSQL  
-- **Git**  
+### `npm start`
 
----
+Runs the app in the development mode.\
+Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-## 📦 Instalación (Entorno Local)
+The page will reload when you make changes.\
+You may also see any lint errors in the console.
 
-Sigue estos pasos para configurar el proyecto en tu máquina local:
+### `npm test`
 
----
+Launches the test runner in the interactive watch mode.\
+See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### Clonar el repositorio
+### `npm run build`
 
-```bash
-git clone https://github.com/tu-usuario/nombre-del-repo-backend.git
-cd nombre-del-repo-backend
+Builds the app for production to the `build` folder.\
+It correctly bundles React in production mode and optimizes the build for the best performance.
 
----
+The build is minified and the filenames include the hashes.\
+Your app is ready to be deployed!
 
-### Instalar dependencias
-```bash
-composer install
+See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### Configurar el archivo .env
-```bash
-cp .env.example .env
+### `npm run eject`
 
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=nombre_de_tu_db
-DB_USERNAME=root
-DB_PASSWORD=
+**Note: this is a one-way operation. Once you `eject`, you can't go back!**
 
-### Generar clave de aplicación
-```bash
-php artisan key:generate
+If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-### Ejecutar Migraciones
-```bash
-php artisan migrate
+Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
 
-### Con seeders:
-```bash
-php artisan db:seed
+You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
 
-### Inicia el servidor local en http://127.0.0.1:8000:
-```bash
-php artisan serve
+## Learn More
 
-Método	Ruta	        Acción CRUD	            Uso
-GET	    /api/jobs	    READ (listar)	        Cargar todos los trabajos
-POST	/api/jobs	    CREATE (crear)	        Agregar un trabajo
-PUT	    /api/jobs/{id}	UPDATE (editar/mover)	Editar datos o mover columnas
-PATCH	/api/jobs/{id}	UPDATE (parcial)	    Actualización parcial
-DELETE	/api/jobs/{id}	DELETE (eliminar)	    Borrar un trabajo
+You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+
+To learn React, check out the [React documentation](https://reactjs.org/).
+
+### Code Splitting
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+
+### Analyzing the Bundle Size
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+
+### Making a Progressive Web App
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+
+### Advanced Configuration
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+
+### Deployment
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+
+### `npm run build` fails to minify
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
