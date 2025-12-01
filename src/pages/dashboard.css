@@ -1,0 +1,84 @@
+/* ============================
+   CONTENEDOR PRINCIPAL
+============================ */
+.dashboard-container {
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 10px 20px;
+}
+
+/* TÍTULO */
+.main-title {
+  text-align: center;
+  margin-bottom: 10px;
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+/* ============================
+   TABLERO KANBAN (GRID RESPONSIVO)
+============================ */
+.dashboard-columns {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 25px;
+  width: 100%;
+}
+
+/* ============================
+   COLUMNA DEL KANBAN
+============================ */
+.dashboard-column {
+  background: #fff;
+  border-radius: 10px;
+  padding: 15px;
+  min-height: 300px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+/* TÍTULOS DE COLUMNAS */
+.dashboard-column h3 {
+  font-size: 1.2rem;
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+/* ============================
+   CARDS
+============================ */
+.trabajo-card {
+  width: 100%;
+}
+
+/* ============================
+   BREAKPOINTS IMPORTANTES
+============================ */
+
+/* 💻 LAPTOP (1366px–1440px) */
+@media (max-width: 1440px) {
+  .dashboard-container {
+    padding: 10px 15px;
+  }
+}
+
+/* TABLET GRANDE Y LAPTOP PEQUEÑA */
+@media (max-width: 1200px) {
+  .dashboard-container {
+    padding: 10px;
+  }
+}
+
+/* 📱 TABLET */
+@media (max-width: 900px) {
+  .dashboard-column {
+    margin-bottom: 20px;
+  }
+}
+
+/* 📱 CELULAR */
+@media (max-width: 600px) {
+  .main-title {
+    font-size: 1.5rem;
+  }
+}

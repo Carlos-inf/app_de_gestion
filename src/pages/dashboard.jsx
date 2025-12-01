@@ -1,236 +1,221 @@
 import React, { useState, useMemo } from "react";
-import { Modal, Button } from "@mantine/core";
+import { Modal, Button, Group } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
+import { IconPlus, IconWallet } from "@tabler/icons-react"; 
 import FormulariodeTrabajo from "../componentes/FormulariodeTrabajo";
 import TrabajoCard from "../componentes/TrabajoCard";
 import Trabajodetalle from "../componentes/Trabajodetalle";
 import Finanzas from "../componentes/Finanzas";
+import "./dashboard.css"; 
 
 const Dashboard = ({ trabajos, onCreate, onUpdate, onDelete }) => {
-  // Modal CREATE 
-  const [createModalOpened, { open: openCreateModal, close: closeCreateModal }] =
-    useDisclosure(false);
+  // --- GESTIÓN DE MODALES ---
+  const [createModalOpened, { open: openCreateModal, close: closeCreateModal }] =
+    useDisclosure(false);
+  const [updateModalOpened, { open: openUpdateModal, close: closeUpdateModal }] =
+    useDisclosure(false);
+  const [finanzasModalOpened, { open: openFinanzasModal, close: closeFinanzasModal }] =
+    useDisclosure(false);
+    
+  const [trabajo_A_Actualizar, setTrabajo_A_Actualizar] = useState(null);
 
-  // Modal UPDATE
-  const [updateModalOpened, { open: openUpdateModal, close: closeUpdateModal }] =
-    useDisclosure(false);
-  const [trabajo_A_Actualizar, setTrabajo_A_Actualizar] = useState(null);
+  // Modal DETALLE
+  const [detalleAbierto, setDetalleAbierto] = useState(false);
+  const [detalleTrabajo, setDetalleTrabajo] = useState(null);
 
-  // Modal DETALLE
-  const [detalleAbierto, setDetalleAbierto] = useState(false);
-  const [detalleTrabajo, setDetalleTrabajo] = useState(null);
+  // --- LÓGICA DE DATOS ---
+  // Ordenar trabajos (tu lógica se mantiene)
+  const trabajosOrdenados = useMemo(() => {
+    return [...trabajos].sort(
+      (a, b) => new Date(a.fecha_recepcion) - new Date(b.fecha_recepcion)
+    );
+  }, [trabajos]);
 
-  // Modal FINANZAS
-  const [finanzasModalOpened, { open: openFinanzasModal, close: closeFinanzasModal }] =
-    useDisclosure(false);
+  // Filtrar por estado
+  const porHacer = trabajosOrdenados.filter((t) => t.estado_trabajo === "Por Hacer");
+  const enProceso = trabajosOrdenados.filter((t) => t.estado_trabajo === "En Proceso");
+  const terminado = trabajosOrdenados.filter((t) => t.estado_trabajo === "Terminado");
 
-  // Ordenar trabajos
-  const trabajosOrdenados = useMemo(() => {
-    return [...trabajos].sort(
-      (a, b) => new Date(a.fecha_recepcion) - new Date(b.fecha_recepcion)
-    );
-  }, [trabajos]);
+  // --- HANDLERS ---
 
-  // Filtrar por estado
-  const porHacer = trabajosOrdenados.filter((t) => t.estado_trabajo === "Por Hacer");
-  const enProceso = trabajosOrdenados.filter((t) => t.estado_trabajo === "En Proceso");
-  const terminado = trabajosOrdenados.filter((t) => t.estado_trabajo === "Terminado");
+  const handleCreate = (data) => {
+    onCreate(data);
+    closeCreateModal();
+  };
 
-  // FUNCIONES
-  const handleCreate = (data) => {
-    onCreate(data);
-    closeCreateModal();
-  };
+  const handleActualizacion = (trabajo) => {
+    setTrabajo_A_Actualizar(trabajo);
+    openUpdateModal();
+  };
 
-  const handleActualizacion = (trabajo) => {
-    setTrabajo_A_Actualizar(trabajo);
-    openUpdateModal();
-  };
+  
+  const handleUpdateSave = async (datos) => {
+    // Utilizamos 'await' y el valor de retorno de onUpdate (en App.js)
+    const success = await onUpdate(datos.id, datos); 
+    if (success) {
+        closeUpdateModal();
+    }
+  };
 
-  const handleUpdateSave = (datos) => {
-    onUpdate(datos.id_trabajo, datos);
-    closeUpdateModal();
-  };
+  const handleVerDetalle = (trabajo) => {
+    setDetalleTrabajo(trabajo);
+    setDetalleAbierto(true);
+  };
 
-  const handleVerDetalle = (trabajo) => {
-    setDetalleTrabajo(trabajo);
-    setDetalleAbierto(true);
-  };
+  // --- LÓGICA DE DRAG AND DROP (D&D) ---
 
-  // RENDER COLUMNA
-  const renderColumn = (title, works, color) => (
-    <div
-      key={title}
-      style={{
-        width: "32%",
-        minHeight: "500px",
-        padding: "15px",
-        borderRadius: "12px",
-        backgroundColor: "#FFFFFF",
-        boxShadow: "0 4px 10px rgba(0,0,0,0.05)",
-        borderTop: `5px solid ${color}`,
-      }}
-    >
-      <h3
-        style={{
-          borderBottom: "2px solid #F0F0F0",
-          paddingBottom: "10px",
-          margin: "0 0 15px 0",
-          fontSize: "18px",
-          color: "#1A237E",
-          fontWeight: "600",
-        }}
-      >
-        {title} ({works.length})
-      </h3>
-      {works.map((trabajo) => (
-        <TrabajoCard
-          key={trabajo.id_trabajo}
-          trabajo={trabajo}
-          onDelete={onDelete}
-          onUpdate={() => handleActualizacion(trabajo)}
-          onVerDetalle={() => handleVerDetalle(trabajo)}
-        />
-      ))}
-    </div>
-  );
+  // Al iniciar el arrastre, guarda el ID del trabajo arrastrado.
+  const onDragStart = (e, trabajoId) => {
+    e.dataTransfer.setData("trabajoId", trabajoId);
+  };
 
-  const columnData = [
-    { title: "Por Hacer", data: porHacer, color: "#E57373" },
-    { title: "En Proceso", data: enProceso, color: "#DCE775" },
-    { title: "Terminado", data: terminado, color: "#4DB6AC" },
-  ];
+  // Evita el comportamiento por defecto para permitir soltar.
+  const onDragOver = (e) => {
+    e.preventDefault();
+  };
 
-  // RENDER
-  return (
-    <div
-      style={{
-        padding: "30px",
-        background: "linear-gradient(180deg, #F5F7FA 0%, #ECEFF1 100%)",
-        minHeight: "100vh",
-        fontFamily: "'Poppins', sans-serif",
-      }}
-    >
-      {/* Encabezado principal */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          gap: "20px",
-          marginBottom: "30px",
-          flexWrap: "wrap",
-        }}
-      >
-        <h1
-          style={{
-            fontSize: "32px",
-            color: "#1e289aff",
-            fontWeight: "700",
-            margin: 0,
-          }}
-        >
-          Agenda de Modista
-        </h1>
+  // HANDLER CRÍTICO: Se ejecuta al soltar la tarjeta en una columna.
+  const handleMoveTrabajo = (e, nuevoEstado) => {
+    e.preventDefault();
+    const idStr = e.dataTransfer.getData("trabajoId");
+    // El ID que viene de setData es una cadena. Asegúrate de que sea un número.
+    const trabajoId = parseInt(idStr); 
 
-        <Button
-          onClick={openCreateModal}
-          style={{
-            backgroundColor: "#0E9D58",
-            color: "white",
-            fontWeight: "500",
-            borderRadius: "10px",
-            transition: "all 0.2s ease-in-out",
-          }}
-          onMouseEnter={(e) =>
-            (e.currentTarget.style.boxShadow = "0 4px 10px rgba(14,157,88,0.3)")
-          }
-          onMouseLeave={(e) => (e.currentTarget.style.boxShadow = "none")}
-        >
-          + Agregar Nuevo Trabajo
-        </Button>
+    // 1. Buscar el trabajo completo para obtener sus datos actuales
+    const trabajoAMover = trabajos.find(t => t.id === trabajoId);
 
-        <Button
-          onClick={openFinanzasModal}
-          style={{
-            backgroundColor: "#2530abff",
-            color: "white",
-            fontWeight: "500",
-            borderRadius: "10px",
-            transition: "all 0.2s ease-in-out",
-          }}
-          onMouseEnter={(e) =>
-            (e.currentTarget.style.boxShadow = "0 4px 10px rgba(26,35,126,0.3)")
-          }
-          onMouseLeave={(e) => (e.currentTarget.style.boxShadow = "none")}
-        >
-          Finanzas
-        </Button>
-      </div>
+    if (trabajoAMover && trabajoId) {
+        const datosActualizados = {
+            // No es necesario copiar el objeto completo, solo el campo que cambia
+            estado_trabajo: nuevoEstado, 
+        };
+        
+        // LLAMADA A LA API CON EL ID NUMÉRICO CORRECTO
+        onUpdate(trabajoId, datosActualizados);
+    } else {
+        console.error("Error en D&D: No se encontró el ID numérico para actualizar.");
+    }
+  };
+  
+  // --- RENDERING ---
+  const columnData = [
+    { title: "Por Hacer", data: porHacer, state: "Por Hacer", color: "#E57373" },
+    { title: "En Proceso", data: enProceso, state: "En Proceso", color: "#DCE775" },
+    { title: "Terminado", data: terminado, state: "Terminado", color: "#4DB6AC" },
+  ];
 
-      {/* Modal FINANZAS */}
-      <Modal
-        opened={finanzasModalOpened}
-        onClose={closeFinanzasModal}
-        title="Sección de Finanzas"
-        size="xl"
-      >
-        <Finanzas trabajos={trabajos} />
-      </Modal>
+  return (
+    <div className="dashboard-container">
+        
+      {/* ENCABEZADO Y BOTONES */}
+      <h2>Gestión de Trabajos</h2>
+      <Group mb="lg">
+        <Button
+          onClick={openCreateModal}
+          leftSection={<IconPlus size={16} />}
+          color="blue"
+        >
+          Agregar Nuevo Trabajo
+        </Button>
+        <Button
+          onClick={openFinanzasModal}
+          leftSection={<IconWallet size={16} />}
+          variant="default"
+        >
+          Ver Finanzas
+        </Button>
+      </Group>
 
-      {/* Modal CREATE */}
-      <Modal
-        opened={createModalOpened}
-        onClose={closeCreateModal}
-        title="Ingresar Nuevo Trabajo"
-        size="lg"
-      >
-        <FormulariodeTrabajo
-          onSave={handleCreate}
-          onCancel={closeCreateModal}
-          initialData={{}}
-        />
-      </Modal>
+      <hr/>
 
-      {/* Modal UPDATE */}
-      {trabajo_A_Actualizar && (
-        <Modal
-          opened={updateModalOpened}
-          onClose={closeUpdateModal}
-          title={`Editar ${trabajo_A_Actualizar.nombre_trabajo}`}
-          size="lg"
-        >
-          <FormulariodeTrabajo
-            onSave={handleUpdateSave}
-            onCancel={closeUpdateModal}
-            initialData={trabajo_A_Actualizar}
-          />
-        </Modal>
-      )}
+      {/* Modales (Mantenidos igual) */}
 
-      {/* Modal DETALLE */}
-      {detalleTrabajo && (
-        <Trabajodetalle
-          trabajo={detalleTrabajo}
-          opened={detalleAbierto}
-          onClose={() => setDetalleAbierto(false)}
-          onUpdate={onUpdate}
-        />
-      )}
+      {/* Modal UPDATE */}
+      <Modal
+        opened={updateModalOpened}
+        onClose={closeUpdateModal}
+        title="Editar Trabajo"
+        size="lg"
+      >
+        {trabajo_A_Actualizar && (
+          <FormulariodeTrabajo
+            initialData={trabajo_A_Actualizar}
+            onSave={handleUpdateSave}
+            onCancel={closeUpdateModal}
+          />
+        )}
+      </Modal>
 
-      {/* Estilo Kanban */}
-      <div
-        style={{
-          display: "flex",
-          gap: "25px",
-          justifyContent: "space-between",
-          flexWrap: "wrap",
-        }}
-      >
-        {columnData.map((col) => renderColumn(col.title, col.data, col.color))}
-      </div>
-    </div>
-  );
+      {/* Modal DETALLE */}
+      <Modal
+        opened={detalleAbierto}
+        onClose={() => setDetalleAbierto(false)}
+        title="Detalles del Trabajo"
+        size="lg"
+      >
+        {detalleTrabajo && (
+          <Trabajodetalle 
+            trabajo={detalleTrabajo}
+            // NO PASAR opened/onClose aquí. El Modal ya las maneja.
+            onUpdate={onUpdate} 
+          />
+        )}
+      </Modal>
+
+      {/* Modal CREATE (Mantenido igual) */}
+      <Modal
+        opened={createModalOpened}
+        onClose={closeCreateModal}
+        title="Agregar Nuevo Trabajo"
+        size="lg"
+      >
+        <FormulariodeTrabajo onSave={handleCreate} onCancel={closeCreateModal} />
+      </Modal>
+
+      {/* Modal FINANZAS (Mantenido igual) */}
+      <Modal
+        opened={finanzasModalOpened}
+        onClose={closeFinanzasModal}
+        title="Sección de Finanzas"
+        size="xl"
+      >
+        <Finanzas trabajos={trabajos} />
+      </Modal>
+
+      {/* Tablero Kanban (Con D&D handlers) */}
+      <div className="dashboard-columns">
+        {columnData.map((col) => (
+          <div
+            key={col.title}
+            className="dashboard-column"
+            style={{ borderTop: `5px solid ${col.color}` }}
+              // HANDLERS DE D&D EN LA COLUMNA
+              onDragOver={onDragOver}
+              onDrop={(e) => handleMoveTrabajo(e, col.state)} // Llama con el estado de la columna
+          >
+            <h3>
+              {col.title} ({col.data.length})
+            </h3>
+            {col.data.map((trabajo) => (
+              <div
+                  key={trabajo.id} 
+                  draggable // Hace la tarjeta arrastrable
+                  onDragStart={(e) => onDragStart(e, trabajo.id)} // Pasa el ID numérico
+                  style={{ cursor: 'grab' }}
+              >
+                <TrabajoCard
+                  trabajo={trabajo}
+                  onUpdate={() => handleActualizacion(trabajo)} 
+                  onDelete={onDelete} 
+                  onVerDetalle={() => handleVerDetalle(trabajo)}
+                />
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 };
 
-export default Dashboard;
+export default Dashboard;           
